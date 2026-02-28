@@ -2,13 +2,13 @@
 CREATE VIEW View_Superstore_Overview
 AS
 SELECT 
-    ROUND(SUM(Sales), 2) AS [Total_Sales],                -- ≈Ã„«·Ì «·„»Ì⁄« 
-    ROUND(SUM(Profit), 2) AS [Total_Profit],              -- ≈Ã„«·Ì «·√—»«Õ
-    COUNT(DISTINCT Order_ID) AS [Total_Orders],           -- ⁄œœ «·ÿ·»« 
-    COUNT(DISTINCT Customer_ID) AS [Total_Customers],     -- ⁄œœ «·⁄„·«¡
-    ROUND((SUM(Profit) / SUM(Sales)) * 100, 2) AS [Profit_Margin_Percent], -- ‰”»… «·—»Õ
-    SUM(Quantity) AS [Total_Quantity_Sold],               -- ≈Ã„«·Ì «·ﬁÿ⁄ «·„»«⁄…
-    AVG(Discount) * 100 AS [Avg_Discount_Percent]         -- „ Ê”ÿ «·Œ’„ «·„⁄ÿÏ
+    ROUND(SUM(Sales), 2) AS [Total_Sales],                -- √Ö√å√£√á√°√≠ √á√°√£√à√≠√ö√á√ä
+    ROUND(SUM(Profit), 2) AS [Total_Profit],              -- √Ö√å√£√á√°√≠ √á√°√É√ë√à√á√ç
+    COUNT(DISTINCT Order_ID) AS [Total_Orders],           -- √ö√è√è √á√°√ò√°√à√á√ä
+    COUNT(DISTINCT Customer_ID) AS [Total_Customers],     -- √ö√è√è √á√°√ö√£√°√á√Å
+    ROUND((SUM(Profit) / SUM(Sales)) * 100, 2) AS [Profit_Margin_Percent], -- √§√ì√à√â √á√°√ë√à√ç
+    SUM(Quantity) AS [Total_Quantity_Sold],               -- √Ö√å√£√á√°√≠ √á√°√û√ò√ö √á√°√£√à√á√ö√â
+    AVG(Discount) * 100 AS [Avg_Discount_Percent]         -- √£√ä√¶√ì√ò √á√°√é√ï√£ √á√°√£√ö√ò√¨
 FROM [End_PROJECT].[dbo].[Sample - Superstore];
 select * from View_Superstore_Overview
 -----------------------Time Trend---------------------------
@@ -17,15 +17,15 @@ AS
 SELECT 
     YEAR(Order_Date) AS [Order_Year],
     MONTH(Order_Date) AS [Order_Month],
-    -- 1. „ƒ‘— «·„»Ì⁄« 
+    -- 1. √£√Ñ√î√ë √á√°√£√à√≠√ö√á√ä
     ROUND(SUM(Sales), 2) AS [Monthly_Sales],
-    -- 2. „ƒ‘— «·√—»«Õ
+    -- 2. √£√Ñ√î√ë √á√°√É√ë√à√á√ç
     ROUND(SUM(Profit), 2) AS [Monthly_Profit],
-    -- 3. „ƒ‘— ⁄œœ «·⁄„·Ì« 
+    -- 3. √£√Ñ√î√ë √ö√è√è √á√°√ö√£√°√≠√á√ä
     COUNT(DISTINCT Order_ID) AS [Monthly_Orders],
-    -- 4. „ƒ‘— „ Ê”ÿ ﬁÌ„… «·ÿ·» (AOV) - „Â„ Ãœ« ·· Ã«—
+    -- 4. √£√Ñ√î√ë √£√ä√¶√ì√ò √û√≠√£√â √á√°√ò√°√à (AOV) - √£√•√£ √å√è√á√∞ √°√°√ä√å√á√ë
     ROUND(SUM(Sales) / COUNT(DISTINCT Order_ID), 2) AS [Avg_Order_Value],
-    -- 5. ‰”»… «·—»Õ
+    -- 5. √§√ì√à√â √á√°√ë√à√ç
     ROUND((SUM(Profit) / NULLIF(SUM(Sales), 0)) * 100, 2) AS [Profit_Margin_Percent]
 FROM [End_PROJECT].[dbo].[Sample - Superstore]
 GROUP BY YEAR(Order_Date), MONTH(Order_Date);
@@ -36,14 +36,14 @@ ORDER BY [Order_Year] DESC, [Order_Month] DESC;
 CREATE VIEW View_Category_Performance
 AS
 WITH Category_Totals AS (
-    -- Õ”«» «·≈Ã„«·Ì«  √Ê·« · ”ÂÌ· Õ”«» «·‰”» «·„∆ÊÌ… ·«Õﬁ«
+    -- √ç√ì√á√à √á√°√Ö√å√£√á√°√≠√á√ä √É√¶√°√á√∞ √°√ä√ì√•√≠√° √ç√ì√á√à √á√°√§√ì√à √á√°√£√Ü√¶√≠√â √°√á√ç√û√á√∞
     SELECT 
         Category,
         Sub_Category,
         SUM(Sales) AS SubCat_Sales,
         SUM(Profit) AS SubCat_Profit,
         SUM(Quantity) AS SubCat_Quantity,
-        -- Õ”«» „ Ê”ÿ «·Œ’„ ··›∆…
+        -- √ç√ì√á√à √£√ä√¶√ì√ò √á√°√é√ï√£ √°√°√ù√Ü√â
         AVG(Discount) * 100 AS Avg_Discount_Percent
     FROM [End_PROJECT].[dbo].[Sample - Superstore]
     GROUP BY Category, Sub_Category
@@ -54,11 +54,11 @@ SELECT
     ROUND(SubCat_Sales, 2) AS Sales,
     ROUND(SubCat_Profit, 2) AS Profit,
     SubCat_Quantity AS Quantity_Sold,
-    -- ‰”»… «·—»ÕÌ… (Profit Margin)
+    -- √§√ì√à√â √á√°√ë√à√ç√≠√â (Profit Margin)
     ROUND((SubCat_Profit / NULLIF(SubCat_Sales, 0)) * 100, 2) AS Profit_Margin_Percent,
-    -- „ Ê”ÿ «·Œ’„
+    -- √£√ä√¶√ì√ò √á√°√é√ï√£
     ROUND(Avg_Discount_Percent, 2) AS Avg_Discount,
-    --  — Ì» «·›∆… «·›—⁄Ì… œ«Œ· «·›∆… «·—∆Ì”Ì… »‰«¡ ⁄·Ï «·„»Ì⁄« 
+    -- √ä√ë√ä√≠√à √á√°√ù√Ü√â √á√°√ù√ë√ö√≠√â √è√á√é√° √á√°√ù√Ü√â √á√°√ë√Ü√≠√ì√≠√â √à√§√á√Å√∞ √ö√°√¨ √á√°√£√à√≠√ö√á√ä
     DENSE_RANK() OVER (PARTITION BY Category ORDER BY SubCat_Sales DESC) AS Sales_Rank_In_Category
 FROM Category_Totals;
 -------------
@@ -75,16 +75,16 @@ SELECT
     COUNT(Order_ID) AS Total_Orders,
     ROUND(SUM(Sales), 2) AS Total_Sales,
     ROUND(SUM(Profit), 2) AS Total_Loss,
-    -- Õ”«» „ Ê”ÿ «·Œ’„ ›Ì Â–Â «·„‰ÿﬁ…/«·›∆…
+    -- √ç√ì√á√à √£√ä√¶√ì√ò √á√°√é√ï√£ √ù√≠ √•√ê√• √á√°√£√§√ò√û√â/√á√°√ù√Ü√â
     ROUND(AVG(Discount) * 100, 2) AS Avg_Discount_Percent,
-    -- ‰”»… «·Œ”«—… ··„»Ì⁄« 
+    -- √§√ì√à√â √á√°√é√ì√á√ë√â √°√°√£√à√≠√ö√á√ä
     ROUND((SUM(Profit) / NULLIF(SUM(Sales), 0)) * 100, 2) AS Loss_Margin_Percent
 FROM [End_PROJECT].[dbo].[Sample - Superstore]
-WHERE Profit < 0  -- ‰—ﬂ“ ›ﬁÿ ⁄·Ï «·⁄„·Ì«  «· Ì Õﬁﬁ  Œ”«—…
+WHERE Profit < 0  -- √§√ë√ü√í √ù√û√ò √ö√°√¨ √á√°√ö√£√°√≠√á√ä √á√°√ä√≠ √ç√û√û√ä √é√ì√á√ë√â
 GROUP BY Category, Sub_Category, Region, State;
 ------------
 SELECT TOP 10 * FROM View_Loss_Deep_Dive
-ORDER BY Total_Loss ASC; -- ASC · — Ì» «·√—ﬁ«„ «·”«·»… „‰ «·√’€— («·√ﬂÀ— Œ”«—…)
+ORDER BY Total_Loss ASC; -- ASC √°√ä√ë√ä√≠√à √á√°√É√ë√û√á√£ √á√°√ì√á√°√à√â √£√§ √á√°√É√ï√õ√ë (√á√°√É√ü√ã√ë √é√ì√á√ë√â)
 --------------Discount_Impact_Study------------------------------
 CREATE VIEW View_Discount_Impact_Study
 AS
@@ -120,11 +120,11 @@ SELECT TOP 20
     ROUND(SUM(Sales), 2) AS Total_Sales,
     ROUND(SUM(Profit), 2) AS Total_Profit,
     ROUND(AVG(Discount) * 100, 2) AS Avg_Discount_Taken,
-    -- „ƒ‘— »‰”„ÌÂ "Discount Reliance" („œÏ «⁄ „«œÂ ⁄·Ï «·Œ’„)
+    -- √£√Ñ√î√ë √à√§√ì√£√≠√• "Discount Reliance" (√£√è√¨ √á√ö√ä√£√á√è√• √ö√°√¨ √á√°√é√ï√£)
     COUNT(CASE WHEN Discount >= 0.5 THEN 1 END) AS High_Discount_Orders
 FROM [End_PROJECT].[dbo].[Sample - Superstore]
 GROUP BY Customer_Name, Segment
-ORDER BY Total_Profit ASC; -- »‰— » „‰ «·√ﬂÀ— Œ”«—… ··√ﬁ·
+ORDER BY Total_Profit ASC; -- √à√§√ë√ä√à √£√§ √á√°√É√ü√ã√ë √é√ì√á√ë√â √°√°√É√û√°
 ------------
 SELECT * FROM View_Discount_Hunters;
 -------------------Rescue_Strategy---------------
@@ -138,7 +138,7 @@ SELECT
     SUM(Sales) AS Lost_Sales_Volume,
     SUM(Profit) AS Total_Loss,
     AVG(Discount) * 100 AS Current_Avg_Discount,
-    -- «· Ê’Ì… «·„ﬁ —Õ… »‰«¡ ⁄·Ï «·»Ì«‰« 
+    -- √á√°√ä√¶√ï√≠√â √á√°√£√û√ä√ë√ç√â √à√§√á√Å√∞ √ö√°√¨ √á√°√à√≠√á√§√á√ä
     CASE 
         WHEN AVG(Discount) >= 0.7 THEN 'Critical: Reduce Discount to Max 20%'
         WHEN AVG(Discount) >= 0.5 THEN 'Urgent: Review Pricing Strategy'
@@ -147,7 +147,7 @@ SELECT
 FROM [End_PROJECT].[dbo].[Sample - Superstore]
 WHERE Profit < 0
 GROUP BY Region, State, Category, Sub_Category
-HAVING SUM(Profit) < -1000; -- ‰—ﬂ“ ›ﬁÿ ⁄·Ï «·Œ”«∆— «·„ƒÀ—… (√ﬂÀ— „‰ 1000 œÊ·«—)
+HAVING SUM(Profit) < -1000; -- √§√ë√ü√í √ù√û√ò √ö√°√¨ √á√°√é√ì√á√Ü√ë √á√°√£√Ñ√ã√ë√â (√É√ü√ã√ë √£√§ 1000 √è√¶√°√á√ë)
 -------------------------
 SELECT 
     Action_Required, 
@@ -165,8 +165,8 @@ SELECT
     COUNT(*) AS Times_Bought_Together
 FROM [End_PROJECT].[dbo].[Sample - Superstore] A
 INNER JOIN [End_PROJECT].[dbo].[Sample - Superstore] B 
-    ON A.Order_ID = B.Order_ID              -- ‰›” «·ÿ·»
-    AND A.Sub_Category < B.Sub_Category    -- ⁄‘«‰ ‰„‰⁄  ﬂ—«— (√°») Ê (»°√) Ê‰„‰⁄ —»ÿ «·„‰ Ã »‰›”Â
+    ON A.Order_ID = B.Order_ID              -- √§√ù√ì √á√°√ò√°√à
+    AND A.Sub_Category < B.Sub_Category    -- √ö√î√á√§ √§√£√§√ö √ä√ü√ë√á√ë (√É¬°√à) √¶ (√à¬°√É) √¶√§√£√§√ö √ë√à√ò √á√°√£√§√ä√å √à√§√ù√ì√•
 GROUP BY A.Sub_Category, B.Sub_Category;
 ----------------
 SELECT TOP 10 * FROM [View_Market_Basket_Analysis]
@@ -177,9 +177,9 @@ AS
 SELECT 
     Customer_ID,
     Customer_Name,
-    COUNT(Order_ID) AS Frequency, -- «‘ —Ï ﬂ«„ „—…
-    round(SUM(Sales),2) AS Monetary,      -- œ›⁄ ﬂ«„ ≈Ã„«·«
-    DATEDIFF(day, MAX(Order_Date), (SELECT MAX(Order_Date) FROM [End_PROJECT].[dbo].[Sample - Superstore])) AS Recency -- »ﬁ«·Â ﬂ«„ ÌÊ„ „« «‘ —‘
+    COUNT(Order_ID) AS Frequency, -- √á√î√ä√ë√¨ √ü√á√£ √£√ë√â
+    round(SUM(Sales),2) AS Monetary,      -- √è√ù√ö √ü√á√£ √Ö√å√£√á√°√á√∞
+    DATEDIFF(day, MAX(Order_Date), (SELECT MAX(Order_Date) FROM [End_PROJECT].[dbo].[Sample - Superstore])) AS Recency -- √à√û√á√°√• √ü√á√£ √≠√¶√£ √£√á √á√î√ä√ë√î
 FROM [End_PROJECT].[dbo].[Sample - Superstore]
 GROUP BY Customer_ID, Customer_Name;
 --------------
